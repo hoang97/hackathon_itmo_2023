@@ -20,13 +20,15 @@ def read_data(path):
 
 def create_table_general_info(conn, data):
     cur = conn.cursor()
-
     try:
         cur.execute("SELECT * FROM general_infos;")
         tmp = cur.fetchone()
         print("Table General Info was initiated !!!")
         if tmp:
             print(tmp)
+        else:
+            print("Droping empty Table ...")
+            cur.execute("DROP TABLE general_infos;")
     except psycopg2.errors.UndefinedTable:
         conn.rollback()
         cur.execute('''CREATE TABLE general_infos 
@@ -58,6 +60,9 @@ def create_table_publications(conn, data):
 
         if tmp:
             print(tmp)
+        else:
+            print("Droping empty Table ...")
+            cur.execute("DROP TABLE publications;")
     except psycopg2.errors.UndefinedTable:
         conn.rollback()
         cur.execute('''CREATE TABLE publications 
@@ -89,6 +94,9 @@ def create_table_projects(conn, data):
         print("Table Projects was initiated !!!")
         if tmp:
             print(tmp)
+        else:
+            print("Droping empty Table ...")
+            cur.execute("DROP TABLE projects;")
     except psycopg2.errors.UndefinedTable:
         conn.rollback()
         cur.execute('''CREATE TABLE projects 
@@ -100,7 +108,7 @@ def create_table_projects(conn, data):
                             name varchar,
                             subdivision varchar,
                             start varchar,
-                            end varchar,
+                            end_time varchar,
                             keywords varchar,
                             registration_card varchar,
                             role varchar,
@@ -108,7 +116,7 @@ def create_table_projects(conn, data):
                         );''')
         for _, row in data.iterrows():
             cur.execute('''INSERT INTO projects
-                            ( isu, number_topic, type, name, subdivision, start, end, keywords, registration_card, role, customer )
+                            ( isu, number_topic, type, name, subdivision, start, end_time, keywords, registration_card, role, customer )
                             VALUES 
                             ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )''',
                             (row['isu'], row['number_topic'], row['type'], row['name'], row['subdivision'], row['start'], row['end'], row['keywords'], row['registration_card'], row['role'], row['customer']))
@@ -126,6 +134,9 @@ def create_table_events(conn, data):
         print("Table Events was initiated !!!")
         if tmp:
             print(tmp)
+        else:
+            print("Droping empty Table ...")
+            cur.execute("DROP TABLE events;")
     except psycopg2.errors.UndefinedTable:
         conn.rollback()
         cur.execute('''CREATE TABLE events 
