@@ -140,11 +140,11 @@ def create_table_events(conn, data):
                             role varchar
                         );''')
         for _, row in data.iterrows():
-            cur.execute('''INSERT INTO Мероприятия
-                            ( ИСУ, name, timing, year, type, rank, role )
+            cur.execute('''INSERT INTO events
+                            ( isu, name, timing, year, type, rank, role )
                             VALUES 
                             ( %s, %s, %s, %s, %s, %s, %s )''',
-                            (row['ИСУ'], row['name'], row['timing'], row['year'], row['type'], row['rank'], row['role']))
+                            (row['isu'], row['name'], row['timing'], row['year'], row['type'], row['rank'], row['role']))
 
     conn.commit()
     cur.close()
