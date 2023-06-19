@@ -22,28 +22,28 @@ def create_table_general_info(conn, data):
     cur = conn.cursor()
 
     try:
-        cur.execute("SELECT * FROM Общая_информация;")
+        cur.execute("SELECT * FROM general_infos;")
         tmp = cur.fetchone()
         print("Table General Info was initiated !!!")
         if tmp:
             print(tmp)
     except psycopg2.errors.UndefinedTable:
         conn.rollback()
-        cur.execute('''CREATE TABLE Общая_информация 
+        cur.execute('''CREATE TABLE general_infos 
                         (
                             id serial PRIMARY KEY,
-                            ИСУ integer,
-                            ФИО varchar,
-                            ОБУЧЕНИЕ varchar,
-                            ДОЛЖНОСТИ varchar,
-                            ПОЛНОМОЧИЯ varchar
+                            isu integer,
+                            full_name varchar,
+                            education varchar,
+                            positions varchar,
+                            powers varchar
                         );''')
         for _, row in data.iterrows():
-            cur.execute('''INSERT INTO Общая_информация
-                            ( ИСУ, ФИО, ОБУЧЕНИЕ, ДОЛЖНОСТИ, ПОЛНОМОЧИЯ )
+            cur.execute('''INSERT INTO general_infos
+                            ( isu, full_name, education, positions, powers )
                             VALUES 
                             ( %s, %s, %s, %s, %s )''',
-                            (row['ИСУ'], row['ФИО'], row['ОБУЧЕНИЕ'], row['ДОЛЖНОСТИ'], row['ПОЛНОМОЧИЯ']))
+                            (row['isu'], row['full_name'], row['education'], row['positions'], row['powers']))
 
     conn.commit()
     cur.close()
@@ -52,7 +52,7 @@ def create_table_general_info(conn, data):
 def create_table_publications(conn, data):
     cur = conn.cursor()
     try:
-        cur.execute("SELECT * FROM Публикации;")
+        cur.execute("SELECT * FROM publications;")
         tmp = cur.fetchone()
         print("Table Publications was initiated !!!")
 
@@ -60,21 +60,21 @@ def create_table_publications(conn, data):
             print(tmp)
     except psycopg2.errors.UndefinedTable:
         conn.rollback()
-        cur.execute('''CREATE TABLE Публикации 
+        cur.execute('''CREATE TABLE publications 
                         (
                             id serial PRIMARY KEY,
-                            ИСУ integer,
-                            ТИП_ПУБЛИКАЦИИ varchar,
-                            ВЫХОДНЫЕ_ДАННЫЕ varchar,
-                            ГОД integer,
-                            ИНДЕКСИРОВАНИЕ_В_БД varchar
+                            isu integer,
+                            type varchar,
+                            output varchar,
+                            year integer,
+                            index_to_db varchar
                         );''')
         for _, row in data.iterrows():
-            cur.execute('''INSERT INTO Публикации
-                            ( ИСУ, ТИП_ПУБЛИКАЦИИ, ВЫХОДНЫЕ_ДАННЫЕ, ГОД, ИНДЕКСИРОВАНИЕ_В_БД )
+            cur.execute('''INSERT INTO publications
+                            ( isu, type, output, year, index_to_db )
                             VALUES 
                             ( %s, %s, %s, %s, %s )''',
-                            (row['ИСУ'], row['ТИП_ПУБЛИКАЦИИ'], row['ВЫХОДНЫЕ_ДАННЫЕ'], row['ГОД'], row['ИНДЕКСИРОВАНИЕ_В_БД']))
+                            (row['isu'], row['type'], row['output'], row['year'], row['index_to_db']))
 
     conn.commit()
     cur.close()
@@ -83,7 +83,7 @@ def create_table_publications(conn, data):
 def create_table_projects(conn, data):
     cur = conn.cursor()
     try:
-        cur.execute("SELECT * FROM Проекты;")
+        cur.execute("SELECT * FROM projects;")
         tmp = cur.fetchone()
 
         print("Table Projects was initiated !!!")
@@ -91,27 +91,27 @@ def create_table_projects(conn, data):
             print(tmp)
     except psycopg2.errors.UndefinedTable:
         conn.rollback()
-        cur.execute('''CREATE TABLE Проекты 
+        cur.execute('''CREATE TABLE projects 
                         (
                             id serial PRIMARY KEY,
-                            ИСУ integer,
-                            НОМЕР_ТЕМЫ integer,
-                            ТИП_ПРОЕКТА varchar,
-                            НАИМЕНОВАНИЕ varchar,
-                            ПОДРАЗДЕЛЕНИЕ varchar,
-                            НАЧАЛО varchar,
-                            ОКОНЧАНИЕ varchar,
-                            КЛЮЧЕВЫЕ_СЛОВА varchar,
-                            РЕГИСТРАЦИОННАЯ_КАРТА varchar,
-                            РОЛЬ varchar,
-                            ЗАКАЗЧИК varchar
+                            isu integer,
+                            number_topic integer,
+                            type varchar,
+                            name varchar,
+                            subdivision varchar,
+                            start varchar,
+                            end varchar,
+                            keywords varchar,
+                            registration_card varchar,
+                            role varchar,
+                            customer varchar
                         );''')
         for _, row in data.iterrows():
-            cur.execute('''INSERT INTO Проекты
-                            ( ИСУ, НОМЕР_ТЕМЫ, ТИП_ПРОЕКТА, НАИМЕНОВАНИЕ, ПОДРАЗДЕЛЕНИЕ, НАЧАЛО, ОКОНЧАНИЕ, КЛЮЧЕВЫЕ_СЛОВА, РЕГИСТРАЦИОННАЯ_КАРТА, РОЛЬ, ЗАКАЗЧИК )
+            cur.execute('''INSERT INTO projects
+                            ( isu, number_topic, type, name, subdivision, start, end, keywords, registration_card, role, customer )
                             VALUES 
                             ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )''',
-                            (row['ИСУ'], row['НОМЕР_ТЕМЫ'], row['ТИП_ПРОЕКТА'], row['НАИМЕНОВАНИЕ'], row['ПОДРАЗДЕЛЕНИЕ'], row['НАЧАЛО'], row['ОКОНЧАНИЕ'], row['КЛЮЧЕВЫЕ_СЛОВА'], row['РЕГИСТРАЦИОННАЯ_КАРТА'], row['РОЛЬ'], row['ЗАКАЗЧИК']))
+                            (row['isu'], row['number_topic'], row['type'], row['name'], row['subdivision'], row['start'], row['end'], row['keywords'], row['registration_card'], row['role'], row['customer']))
 
     conn.commit()
     cur.close()
@@ -120,7 +120,7 @@ def create_table_projects(conn, data):
 def create_table_events(conn, data):
     cur = conn.cursor()
     try:
-        cur.execute("SELECT * FROM Мероприятия;")
+        cur.execute("SELECT * FROM events;")
         tmp = cur.fetchone()
 
         print("Table Events was initiated !!!")
@@ -128,23 +128,23 @@ def create_table_events(conn, data):
             print(tmp)
     except psycopg2.errors.UndefinedTable:
         conn.rollback()
-        cur.execute('''CREATE TABLE Мероприятия 
+        cur.execute('''CREATE TABLE events 
                         (
                             id serial PRIMARY KEY,
-                            ИСУ integer,
-                            НАИМЕНОВАНИЕ varchar,
-                            СРОКИ varchar,
-                            ГОД integer,
-                            ТИП varchar,
-                            РАНГ varchar,
-                            РОЛИ varchar
+                            isu integer,
+                            name varchar,
+                            timing varchar,
+                            year integer,
+                            type varchar,
+                            rank varchar,
+                            role varchar
                         );''')
         for _, row in data.iterrows():
             cur.execute('''INSERT INTO Мероприятия
-                            ( ИСУ, НАИМЕНОВАНИЕ, СРОКИ, ГОД, ТИП, РАНГ, РОЛИ )
+                            ( ИСУ, name, timing, year, type, rank, role )
                             VALUES 
                             ( %s, %s, %s, %s, %s, %s, %s )''',
-                            (row['ИСУ'], row['НАИМЕНОВАНИЕ'], row['СРОКИ'], row['ГОД'], row['ТИП'], row['РАНГ'], row['РОЛИ']))
+                            (row['ИСУ'], row['name'], row['timing'], row['year'], row['type'], row['rank'], row['role']))
 
     conn.commit()
     cur.close()
