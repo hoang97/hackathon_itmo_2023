@@ -2,3 +2,4 @@
 env/
 diagrams.drawio
 Dockerfile
+aggregate_info/
