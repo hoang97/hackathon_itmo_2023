@@ -151,10 +151,10 @@ def create_table_events(conn, data):
         else:
             for _, row in data.iterrows():
                 cur.execute('''INSERT INTO events
-                                ( name, start_time, end_time, type )
+                                ( name, start_time, end_time, type, rank )
                                 VALUES 
-                                ( %s, %s, %s, %s )''',
-                                (row['name'], row['start'], row['end'], row['type']))
+                                ( %s, %s, %s, %s, %s )''',
+                                (row['name'], row['start'], row['end'], row['type'], row['rank']))
         print("Table Events was successfully initiated !!!")
     except psycopg2.errors.UndefinedTable:
         conn.rollback()
@@ -164,7 +164,8 @@ def create_table_events(conn, data):
                             name varchar,
                             start_time integer,
                             end_time integer,
-                            type varchar
+                            type varchar,
+                            rank varchar
                         );''')
         print("Table Events was not created !!!")
         
@@ -251,10 +252,10 @@ def create_table_user_events(conn, data):
                 cur.execute('''SELECT id FROM events WHERE events.name=%s''', (row['name'],))
                 event_id = cur.fetchone()[0]
                 cur.execute('''INSERT INTO user_events
-                                ( isu, event, rank, role )
+                                ( isu, event, role )
                                 VALUES 
-                                ( %s, %s, %s, %s )''',
-                                (row['isu'], event_id, row['rank'], row['role']))
+                                ( %s, %s, %s )''',
+                                (row['isu'], event_id, row['role']))
         print("Table user_events was successfully initiated !!!")
     except psycopg2.errors.UndefinedTable:
         conn.rollback()
@@ -263,7 +264,6 @@ def create_table_user_events(conn, data):
                             id serial PRIMARY KEY,
                             isu integer,
                             event integer,
-                            rank varchar,
                             role varchar
                         );''')
         print("Table user_events was not created !!!")
